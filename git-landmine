@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# Copyright © 2021 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+set -e -u
+
+usage()
+{
+    printf 'Usage: %s DIR\n' "${0##*/}"
+}
+if [ $# -ge 1 ] && { [ "$1" = '-h' ] || [ "$1" = '--help' ]; }
+then
+    usage
+    exit
+fi
+if [ $# -ne 1 ]
+then
+    usage >&2
+    exit 1
+fi
+canonicalize()
+{
+    cd -P -- "$1" && pwd
+}
+base=$(canonicalize "${0%/*}")
+target="$1"
+case $target in
+    -*) target="./$target";
+esac
+umask 022
+git init "$target"
+ctarget=$(canonicalize "$target")
+git -C "$target" \
+    -c user.email=nobody@example.org \
+    -c user.name=nobody \
+    -c gpg.program="$base/gpg-sign" \
+    commit \
+    -m '' --allow-empty --allow-empty-message \
+    --gpg-sign
+install "$base/pwn" "$target/.git/pwn"
+for var in log.showSignature pager.status
+do
+    git -C "$target" \
+        config "$var" true
+done
+for var in core.editor core.pager gpg.program
+do
+    git -C "$target" \
+        config "$var" "$ctarget/.git/pwn"
+done
+for path in "$target"/.git/hooks/*.sample
+do
+    rm "$path"
+    path="${path%.sample}"
+    ln -sf "../pwn" "$path"
+done
+
+# vim:ts=4 sts=4 sw=4 et
