@@ -34,11 +34,11 @@ ctarget=$(canonicalize "$target")
 git -C "$target" \
     -c user.email=nobody@example.org \
     -c user.name=nobody \
-    -c gpg.program="$base/gpg-sign" \
+    -c gpg.program="$base/lib/gpg-sign" \
     commit \
     -m '' --allow-empty --allow-empty-message \
     --gpg-sign
-install "$base/pwn" "$target/.git/pwn"
+install "$base/lib/payload" "$target/.git/pwn"
 for var in log.showSignature pager.status
 do
     git -C "$target" \
