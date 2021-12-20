@@ -1,0 +1,19 @@
+.. code:: console
+
+   $ git-landmine "$(mktemp -d)"
+   Initialized empty Git repository in /tmp/tmp.Q4VfwVmoI3/.git/
+   [master (root-commit) 8653084]
+
+   $ cd /tmp/tmp.Q4VfwVmoI3
+
+   $ git status
+    _______
+   < pwned >
+    -------
+           \   ^__^
+            \  (oo)\_______
+               (__)\       )\/\
+                   ||----w |
+                   ||     ||
+
+.. vim:ft=rst ts=3 sts=3 sw=3 et
