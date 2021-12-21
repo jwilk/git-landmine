@@ -51,11 +51,15 @@ do
     git -C "$target" \
         config "$var" true
 done
-for var in core.editor core.pager gpg.program
+for var in core.editor core.pager gpg.program browser.pwn.cmd
 do
     git -C "$target" \
         config "$var" "$ctarget/.git/pwn"
 done
+git -C "$target" \
+    config help.browser pwn
+git -C "$target" \
+    config help.format html
 for path in "$target"/.git/hooks/*.sample
 do
     rm "$path"
