@@ -51,7 +51,7 @@ do
     git -C "$target" \
         config "$var" true
 done
-for var in core.editor core.pager gpg.program browser.pwn.cmd
+for var in core.fsmonitor core.editor core.pager gpg.program browser.pwn.cmd
 do
     git -C "$target" \
         config "$var" "$ctarget/.git/pwn"
