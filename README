@@ -6,7 +6,7 @@
 
    $ cd /tmp/tmp.Q4VfwVmoI3
 
-   $ git status
+   $ git describe
     _______
    < pwned >
     -------
