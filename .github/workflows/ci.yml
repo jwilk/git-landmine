@@ -1,0 +1,29 @@
+name: CI
+on:
+- push
+- pull_request
+jobs:
+  main:
+    strategy:
+      matrix:
+        os:
+        - ubuntu-18.04
+        - ubuntu-20.04
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v2
+    - name: check Git version
+      run: |
+        git --version
+    - name: run tests
+      run:
+        prove -v
+    - name: run shellcheck
+      run: |
+        shellcheck git-landmine t/*.t
+    - name: check README syntax
+      run: |
+        pip install restructuredtext-lint pygments
+        rst-lint --level=info --encoding=UTF-8 README
+
+# vim:ts=2 sts=2 sw=2 et
