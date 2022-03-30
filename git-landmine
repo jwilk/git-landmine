@@ -46,6 +46,7 @@ do
     git -C "$target" \
         config "pager.$cmd" true
 done
+# shellcheck disable=SC2043
 for var in log.showSignature
 do
     git -C "$target" \
