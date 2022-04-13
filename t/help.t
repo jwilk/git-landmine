@@ -7,7 +7,7 @@ set -e -u
 pdir="${0%/*}/.."
 prog="$pdir/git-landmine"
 echo 1..2
-xout='Usage: git-landmine DIR'
+xout='Usage: git-landmine [--bare] DIR'
 declare -i n=0
 for opt in '-h' '--help'
 do
