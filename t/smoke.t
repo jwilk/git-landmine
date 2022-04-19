@@ -6,31 +6,46 @@
 set -e -u
 pdir="${0%/*}/.."
 prog="$pdir/git-landmine"
-echo 1..4
 declare -i n=0
-for opts in '' '--bare'
-do
+t()
+{
+    cmd="$1"
+    xout="pwned via $2"
+    shift 2
     tmpdir=$(mktemp -d -t git-landmine.XXXXXX)
-    printf '#!/bin/sh\ntouch ../pwned' > "$tmpdir/cowsay"
+    printf '#!/bin/sh\necho "$*" >> ../pwned\n' > "$tmpdir/cowsay"
     chmod u+x "$tmpdir/cowsay"
-    "$prog" $opts "$tmpdir/repo"
+    "$prog" "$@" "$tmpdir/repo"
     pushd "$tmpdir/repo" > /dev/null
-    for subcmd in 'status' 'describe'
-    do
-        n+=1
-        cmd="git $subcmd"
-        PATH="$tmpdir:$PATH" script -c "$cmd" /dev/null > ../log
-        if [ -e "$tmpdir/pwned" ]
+    n+=1
+    PATH="$tmpdir:$PATH" script -c "$cmd" /dev/null > ../log
+    pfx=''
+    [ "$@" ] && pfx="[$*] "
+    ident="$n $pfx$cmd"
+    if [ -e "$tmpdir/pwned" ]
+    then
+        out=$(cat "$tmpdir/pwned")
+        if [ "$out" = "$xout" ]
         then
-            echo "ok $n $cmd"
+            echo "ok $ident"
         else
-            sed -e 's/^/# /' ../log
-            echo "not ok $n $cmd"
+            diff -u <(cat <<< "$xout") <(cat <<< "$out") | sed -e 's/^/# /'
+            echo "not ok $ident"
         fi
-        rm -f "$tmpdir/pwned"
-    done
+    else
+        sed -e 's/^/# /' ../log
+        echo "not ok $ident"
+    fi
     popd > /dev/null
     rm -rf "$tmpdir"
-done
+}
+T()
+{
+    t "$@"
+    t "$@" --bare
+}
+echo 1..3
+t 'git status >/dev/null' 'core.fsmonitor'
+T 'git describe' 'core.pager'
 
 # vim:ts=4 sts=4 sw=4 et ft=sh
