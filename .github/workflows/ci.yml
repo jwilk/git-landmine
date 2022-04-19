@@ -12,6 +12,13 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v2
+    - name: set up APT
+      run: |
+        printf 'Apt::Install-Recommends "false";\n' | sudo tee -a /etc/apt/apt.conf
+        sudo apt-get update
+    - name: install Git docs
+      run: |
+        sudo apt-get install git-doc
     - name: check Git version
       run: |
         git --version
