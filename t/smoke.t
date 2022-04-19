@@ -44,8 +44,12 @@ T()
     t "$@"
     t "$@" --bare
 }
-echo 1..3
+echo 1..10
 t 'git status >/dev/null' 'core.fsmonitor'
 T 'git describe' 'core.pager'
+T 'git config -e' 'core.editor'
+T 'git log >/dev/null' 'gpg.program'
+T 'git config --help' 'help.browser'
+t 'git diff 4b825dc642cb6eb9a060e54bf8d69288fbee4904 HEAD >/dev/null' 'diff driver'
 
 # vim:ts=4 sts=4 sw=4 et ft=sh
