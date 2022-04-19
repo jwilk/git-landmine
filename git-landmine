@@ -76,11 +76,13 @@ for var in log.showSignature
 do
     tgit config "$var" true
 done
-for var in core.fsmonitor core.editor core.pager gpg.program browser.pwn.cmd
+for var in core.fsmonitor core.editor core.pager
 do
-    tgit config "$var" "$dotgit/pwn"
+    tgit config "$var" "GIT_LANDMINE_VECTOR=$var $dotgit/pwn"
 done
+tgit config gpg.program "$dotgit/pwn"
 tgit config help.browser pwn
+tgit config browser.pwn.cmd "GIT_LANDMINE_VECTOR=help.browser $dotgit/pwn"
 tgit config help.format html
 for path in "$target/$dotgit"/hooks/*.sample
 do

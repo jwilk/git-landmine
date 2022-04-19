@@ -7,9 +7,9 @@
    $ cd /tmp/tmp.Q4VfwVmoI3
 
    $ git describe
-    _______
-   < pwned >
-    -------
+    ______________________
+   < pwned via core.pager >
+    ----------------------
            \   ^__^
             \  (oo)\_______
                (__)\       )\/\

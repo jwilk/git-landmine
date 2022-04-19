@@ -1,2 +1,28 @@
 #!/bin/sh
-exec cowsay pwned >/dev/tty
+
+# Copyright © 2022 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+msg='pwned'
+vec="${GIT_LANDMINE_VECTOR-}"
+if [ -n "$vec" ]
+then
+	msg="$msg via $vec"
+else
+    while [ $# -gt 0 ]
+    do
+        if [ "$1" = '--verify' ]
+        then
+            msg="$msg via gpg.program"
+            break
+        fi
+        shift
+    done
+    if [ -n "${msg##* *}" ] && [ -z "${0##.git/hooks/*}" ]
+    then
+        msg="msg via $0"
+    fi
+fi
+exec cowsay "$msg" >/dev/tty
+
+# vim:ts=4 sts=4 sw=4 et
