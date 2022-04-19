@@ -55,13 +55,28 @@ tgit()
 {
     git -C "$target" "$@"
 }
+tgit fast-import --quiet <<EOF
+blob
+mark :1
+data <<eof
+* diff=pwn
+eof
+reset refs/tmp
+commit refs/tmp
+mark :2
+author <> 0 +0000
+committer <> 0 +0000
+data 0
+M 100644 :1 .gitattributes
+EOF
 commit=$(tgit \
     -c user.email=nobody@example.org \
     -c user.name=nobody \
     -c gpg.program="$base/lib/gpg-sign" \
-    commit-tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904 \
+    commit-tree 'refs/tmp^{tree}' \
     --gpg-sign < /dev/null
 )
+tgit update-ref -d 'refs/tmp'
 branch=$(git -C "$target" symbolic-ref --short HEAD)
 tgit branch "$branch" "$commit"
 install "$base/lib/payload" "$target/$dotgit/pwn"
@@ -90,5 +105,6 @@ do
     path="${path%.sample}"
     ln -sf "../pwn" "$path"
 done
+tgit config diff.pwn.command "GIT_LANDMINE_VECTOR='diff driver' $dotgit/pwn"
 
 # vim:ts=4 sts=4 sw=4 et
