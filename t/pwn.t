@@ -18,7 +18,7 @@ t()
     "$prog" "$@" "$tmpdir/repo"
     pushd "$tmpdir/repo" > /dev/null
     n+=1
-    PATH="$tmpdir:$PATH" script -c "$cmd" /dev/null > ../log
+    PATH="$tmpdir:$PATH" script -c "$cmd" /dev/null < /dev/null > ../log
     pfx=''
     [ "$@" ] && pfx="[$*] "
     ident="$n $pfx$cmd"
