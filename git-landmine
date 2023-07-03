@@ -77,7 +77,7 @@ commit=$(tgit \
     --gpg-sign < /dev/null
 )
 tgit update-ref -d 'refs/tmp'
-branch=$(git -C "$target" symbolic-ref --short HEAD)
+branch=$(tgit symbolic-ref --short HEAD)
 tgit branch "$branch" "$commit"
 if [ -z "$bare" ]
 then
