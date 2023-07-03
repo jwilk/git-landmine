@@ -45,6 +45,8 @@ T()
     t "$@" --bare
 }
 echo 1..10
+export PAGER=false
+export EDITOR=false
 t 'git status >/dev/null' 'core.fsmonitor'
 T 'git describe' 'core.pager'
 T 'git config -e' 'core.editor'
