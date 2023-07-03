@@ -53,7 +53,7 @@ umask 022
 git init ${bare:+--bare} "$target"
 tgit()
 {
-    git -C "$target" "$@"
+    git -c safe.bareRepository=all -C "$target" "$@"
 }
 tgit fast-import --quiet <<EOF
 blob
