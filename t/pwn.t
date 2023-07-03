@@ -10,6 +10,10 @@ declare -i n=0
 t()
 {
     cmd="$1"
+    if [ "${3-}" = '--bare' ]
+    then
+        cmd=${cmd/#git /git -c safe.bareRepository=all }
+    fi
     xout="pwned via $2"
     shift 2
     tmpdir=$(mktemp -d -t git-landmine.XXXXXX)
