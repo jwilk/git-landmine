@@ -28,7 +28,7 @@ t()
     ident="$n $pfx$cmd"
     if [ -e "$tmpdir/pwned" ]
     then
-        out=$(cat "$tmpdir/pwned")
+        out=$(< "$tmpdir/pwned")
         if [ "$out" = "$xout" ]
         then
             echo "ok $ident"
