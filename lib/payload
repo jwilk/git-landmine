@@ -18,9 +18,12 @@ else
         fi
         shift
     done
-    if [ -n "${msg##* *}" ] && [ -z "${0##.git/hooks/*}" ]
+    if [ -n "${msg##* *}" ]
     then
-        msg="msg via $0"
+        case $0 in
+            .git/hooks/*|hooks/*)
+                msg="msg via $0";;
+        esac
     fi
 fi
 exec cowsay "$msg" >/dev/tty
