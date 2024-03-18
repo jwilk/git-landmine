@@ -7,7 +7,7 @@ msg='pwned'
 vec="${GIT_LANDMINE_VECTOR-}"
 if [ -n "$vec" ]
 then
-	msg="$msg via $vec"
+    msg="$msg via $vec"
 else
     while [ $# -gt 0 ]
     do
